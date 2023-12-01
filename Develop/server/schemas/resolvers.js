@@ -21,7 +21,7 @@ const resolvers = {
     // Mutations
     Mutation: {
         // adding a user
-        addUser: async(_parent, { username, email, password }) => {
+        newUser: async(_parent, { username, email, password }) => {
             // create a user and their token
             const user = await User.create({ username, email, password });
             const token = signToken(user);
