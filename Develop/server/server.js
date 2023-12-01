@@ -5,6 +5,9 @@ const { ApolloServer } = require('@apollo/server');
 const { expressMiddleware } = require('@apollo/server/express4');
 
 // import typeDefs and resolvers
+const { typeDefs, resolvers } = require('./schemas');
+
+// configure connection with Apollo server and imported typeDefs and resolvers
 const PORT = process.env.PORT || 3001;
 const app = express();
 const server = new ApolloServer({
