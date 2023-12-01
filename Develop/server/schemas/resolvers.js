@@ -16,5 +16,17 @@ const resolvers = {
             }
             throw new AuthenticationError('No user found with these credentials, please sign up or try again');
         }
+    },
+
+    // Mutations
+    Mutation: {
+        // adding a user
+        addUSer: async(parent, { username, email, password }) => {
+            // create a user and their token
+            const user = await User.create({ username, email, password });
+            const token = signToken(user);
+
+            return { token, user };
+        }
     }
 }
