@@ -48,6 +48,21 @@ const resolvers = {
             console.log("user successfully logged in");
             return { token, user };
 
+        },
+
+        // saving a book
+        saveBook: async (_parent, { input }, context) => {
+            if (context.user) {
+                // add the book to the user's savedBooks array
+                return User.findOneAndUpdate(
+                    // find the user by their id
+                    { _id: context.user._id },
+                    // add the book to the array
+                    { $addToSet: { savedBooks: input } },
+                    // return the updated user
+                    { new: true }
+                )
+            }
         }
     }
 }
