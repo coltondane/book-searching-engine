@@ -21,12 +21,33 @@ const resolvers = {
     // Mutations
     Mutation: {
         // adding a user
-        addUSer: async(parent, { username, email, password }) => {
+        addUser: async(_parent, { username, email, password }) => {
             // create a user and their token
             const user = await User.create({ username, email, password });
             const token = signToken(user);
 
             return { token, user };
+        },
+
+        // logging in a user
+        userLogin: async(_parent, { email, password }) => {
+            // find a user by their email
+            const user = await User.findOne({ email });
+            if (!user) {
+                throw new AuthenticationError('incorrect username or password');
+            }
+            // check the password
+            const userPass = await user.isCorrectPassword(password);
+
+            if (!userPass) {
+                throw new AuthenticationError('incorrect username or password');
+            }
+
+            // create a token
+            const token = signToken(user);
+            console.log("user successfully logged in");
+            return { token, user };
+
         }
     }
 }
