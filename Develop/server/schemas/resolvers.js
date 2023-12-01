@@ -52,6 +52,7 @@ const resolvers = {
 
         // saving a book
         saveBook: async (_parent, { input }, context) => {
+            // if the user is logged in  
             if (context.user) {
                 // add the book to the user's savedBooks array
                 return User.findOneAndUpdate(
@@ -63,6 +64,25 @@ const resolvers = {
                     { new: true }
                 )
             }
-        }
-    }
-}
+        },
+
+        // delete a book
+        deleteBook: async (_parent, { bookId }, context) => {
+            if (context.user) {
+                // remove the book from the user's savedBooks array
+                const newBookArray = await User.findOneAndUpdate(
+                    // find the user by their id
+                    { _id: context.user._id },
+                    // remove the book from the array
+                    { $pull: { savedBooks: { bookId } } },
+                    // return the updated user
+                    { new: true }
+                )
+                // return the updated array with the book removed
+                return newBookArray;
+            }
+        },
+
+    },
+};
+
