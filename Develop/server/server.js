@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const db = require('./config/connection');
 // import apollo server instead of routes
 const { ApolloServer } = require('@apollo/server');
 const { expressMiddleware } = require('@apollo/server/express4');
@@ -18,7 +19,7 @@ const server = new ApolloServer({
 const startApolloServer = async () => {
   await server.start();
   
-  app.use(express.urlencoded({ extended: true }));
+  app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
 
   app.use('/graphql', expressMiddleware(server));
@@ -33,9 +34,14 @@ const startApolloServer = async () => {
   }
 
   db.once('open', () => {
-    app.listen(PORT, () => console.log(`🌍 Now listening on localhost:${PORT}`));
+    app.listen(PORT, () => {
+      console.log(`🌍 Now listening on http://localhost:${PORT}`)
+      console.log(`🌍 DA GRAF! listening on localhost:${PORT}`)
+    })
   });
 
 };
+
+startApolloServer(typeDefs, resolvers);
 
 
