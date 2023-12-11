@@ -13,7 +13,7 @@ const SignupForm = () => {
   // set state for alert
   const [showAlert, setShowAlert] = useState(false);
 
-  const [createUser, { error }] = useMutation(ADD_USER);
+  const [addUser, { error }] = useMutation(ADD_USER);
 
   useEffect(() => {
     if (error) {
@@ -39,18 +39,15 @@ const SignupForm = () => {
     }
 
     try {
-      const response = await createUser({
-        variables: {...userFormData}
+      console.log(userFormData);
+      const { data } = await addUser({
+        variables: { ...userFormData },
       });
 
-      console.log(response.data);
-      console.log("test");
+      Auth.login(data.createUser.token);
 
-      const { token, user } = await response.data.addUser;
-      console.log(user);
-      Auth.login(token);
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error(error);
       setShowAlert(true);
     }
 
