@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 
 import { useMutation } from '@apollo/client';
@@ -44,6 +44,7 @@ const SignupForm = () => {
       });
 
       console.log(response.data);
+      console.log("test");
 
       if (!response.ok) {
         throw new Error('something went wrong!');

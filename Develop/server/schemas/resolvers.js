@@ -23,10 +23,17 @@ const resolvers = {
         // adding a user
         newUser: async(_parent, { username, email, password }) => {
             // create a user and their token
-            const user = await User.create({ username, email, password });
-            const token = signToken(user);
-
-            return { token, user };
+            try {
+                const user = await User.create({ username, email, password });
+                const token = signToken(user);
+    
+                console.log("user successfully created");
+                return { token, user };
+                
+            } catch (error) {
+                console.error(error);
+                throw new AuthenticationError('Something went wrong creating user!');
+            }
         },
 
         // logging in a user
