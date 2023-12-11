@@ -68,7 +68,7 @@ const resolvers = {
                     // add the book to the array
                     { $addToSet: { savedBooks: input } },
                     // return the updated user
-                    { new: true }
+                    { new: true, runValidators: true }
                 )
             }
         },
