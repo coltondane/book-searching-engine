@@ -58,19 +58,23 @@ const resolvers = {
         },
 
         // saving a book
-        saveBook: async (_parent, { input }, context) => {
+        saveBook: async (parent, { bookInfo }, context) => {
             // if the user is logged in  
             if (context.user) {
                 // add the book to the user's savedBooks array
-                return User.findOneAndUpdate(
+                const booksForUser =await  User.findOneAndUpdate(
                     // find the user by their id
                     { _id: context.user._id },
                     // add the book to the array
-                    { $addToSet: { savedBooks: input } },
+                    { $push: { savedBooks: bookInfo } },
                     // return the updated user
                     { new: true, runValidators: true }
-                )
+                );
+
+                return booksForUser;
             }
+
+            throw new AuthenticationError('You need to be logged in to save a book!');
         },
 
         // delete a book
